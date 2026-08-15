@@ -11,7 +11,7 @@ func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	hide()
 
-func movement(velocity, delta):
+func movement(velocity):
 	if velocity.x != 0 and velocity.y != 0:
 		$AnimatedSprite2D.animation = "up"
 
@@ -87,11 +87,11 @@ func _process(delta: float) -> void:
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
 
-	movement(velocity, delta)
+	movement(velocity)
 
 	
 
-func _on_body_entered(body: Node2D) -> void:
+func _on_body_entered(_body: Node2D) -> void:
 	hide() # Player disappears after being hit.
 	hit.emit()
 	# Must be deferred as we can't change physics properties on a physics callback.
