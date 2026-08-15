@@ -3,6 +3,9 @@ extends Node
 @export var mob_scene: PackedScene
 var score
 # Called when the node enters the scene tree for the first time.
+
+var mob_count: int = 0
+
 func _ready() -> void:
 	pass
 
@@ -26,6 +29,10 @@ func new_game():
 
 func _on_mob_timer_timeout() -> void:
 	var mob = mob_scene.instantiate()
+	mob_count += 1
+	LoggerGlobal.info(
+	"Mob #" + str(mob_count) + " spawned | ID: " + str(mob.get_instance_id())
+)
 
 	# Choose a random location on Path2D.
 	var mob_spawn_location = $MobPath/MobSpawnLocation
