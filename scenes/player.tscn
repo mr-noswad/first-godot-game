@@ -51,3 +51,4 @@ animation = &"up"
 shape = SubResource("CapsuleShape2D_xboni")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="shoot" from="." to="." method="_on_shoot"]

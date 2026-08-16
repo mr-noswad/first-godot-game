@@ -60,6 +60,13 @@ func _on_mob_timer_timeout() -> void:
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
 
+func _on_player_shoot(Bullet, player_rotation, location, last_direction):
+	var spawned_bullet = Bullet.instantiate()
+	add_child(spawned_bullet)
+	spawned_bullet.rotation = player_rotation
+	spawned_bullet.position = location
+	spawned_bullet.direction = last_direction
+
 func _on_score_timer_timeout() -> void:
 	score += 1
 	$HUD.update_score(score)

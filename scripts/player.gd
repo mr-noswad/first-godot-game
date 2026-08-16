@@ -6,6 +6,8 @@ var screen_size # Size of the game window.
 @export var speed = 400 # How fast the player will move (pixels/sec).
 @export var bullet_scene: PackedScene
 
+
+signal shoot(bullet, direction, location)
 var last_direction: Vector2 = Vector2.UP
 var player_bullet_count: int = 0
 
@@ -85,7 +87,7 @@ func _process(delta: float) -> void:
 	if velocity.length() > 0:
 		last_direction = velocity.normalized()
 		
-	if Input.is_action_just_pressed("shoot"):
+	#if Input.is_action_just_pressed("shoot"):
 		"""
 		At the top @export var bullet_scene: PackedScene
 		We add the bullet scene in the ui to the right after the top is done
@@ -98,16 +100,18 @@ func _process(delta: float) -> void:
 		and the bullet dir is equal the velocity which is above. 
 		
 		"""
-		var bullet: Area2D = bullet_scene.instantiate()
-		get_parent().get_node("Bullets").add_child(bullet)
-		bullet.global_position = global_position
-		if velocity.length() == 0:
-			bullet.direction = last_direction
-		else:
-			bullet.direction = velocity.normalized()
-		player_bullet_count += 1
-		LoggerGlobal.info(
-			"Player Bullet #" + str(player_bullet_count) + " spawned | ID: " + str(bullet.get_instance_id()))
+		
+		
+		#var bullet: Area2D = bullet_scene.instantiate()
+		#get_parent().get_node("Bullets").add_child(bullet)
+		#bullet.global_position = global_position
+		#if velocity.length() == 0:
+			#bullet.direction = last_direction
+		#else:
+			#bullet.direction = velocity.normalized()
+		#player_bullet_count += 1
+		#LoggerGlobal.info(
+			#"Player Bullet #" + str(player_bullet_count) + " spawned | ID: " + str(bullet.get_instance_id()))
 		
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
@@ -117,6 +121,9 @@ func _process(delta: float) -> void:
 
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
+	
+	if Input.is_action_just_pressed("shoot"):
+		shoot.emit(bullet_scene, rotation, position, last_direction)
 
 	movement(velocity)
 
