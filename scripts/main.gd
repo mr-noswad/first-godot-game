@@ -74,3 +74,50 @@ func _on_score_timer_timeout() -> void:
 func _on_start_timer_timeout() -> void:
 	$MobTimer.start()
 	$ScoreTimer.start()
+
+
+# ============================================================
+# COLLISION LAYERS & MASKS
+# ============================================================
+#
+# Layer = What this object IS / which layer it exists on.
+# Mask  = What this object DETECTS / which layers it looks for.
+#
+# Think:
+#   Layer = "I am here"
+#   Mask  = "I am looking for these"
+#
+# ------------------------------------------------------------
+# Object   | Type          | Layer | Mask
+# ------------------------------------------------------------
+# Player   | Area2D        |   1   |   2
+# Mob      | RigidBody2D   |   2   |  1,4
+# Bullet   | Area2D        |   4   |   2
+# ------------------------------------------------------------
+#
+# Player:
+#   Layer 1 = Player
+#   Mask 2  = detects Mobs
+#
+# Mob:
+#   Layer 2 = Mob
+#   Mask 1  = detects Player
+#   Mask 4  = detects Bullets
+#
+# Bullet:
+#   Layer 4 = Bullet
+#   Mask 2  = detects Mobs
+#
+# Example:
+#   Bullet (Layer 4)
+#       ↓
+#   Bullet Mask includes 2
+#       ↓
+#   Mob (Layer 2)
+#       ↓
+#   Collision detected
+#
+# IMPORTANT:
+#   Layer numbers are just categories.
+#   The Layer and Mask do NOT need to match.
+# ============================================================

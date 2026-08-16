@@ -18,9 +18,8 @@ the body variable and then checks if its in the mobs group.
 Then deletes the body and then the bullet"
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("mobs"):
+		body.take_damage(50)
 		LoggerGlobal.info(
 			"Bullet hit Mob #" + str(body.mob_number)
 		)
-
-		body.queue_free()
 		queue_free()
