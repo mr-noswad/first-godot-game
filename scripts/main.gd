@@ -16,6 +16,7 @@ func game_over() -> void:
 	$HUD.show_game_over()
 	$Music.stop()
 	$DeathSound.play()
+	
 
 func new_game():
 	get_tree().call_group("mobs", "queue_free")
@@ -30,8 +31,12 @@ func new_game():
 func _on_mob_timer_timeout() -> void:
 	var mob = mob_scene.instantiate()
 	mob_count += 1
+	"""
+	We int mob number in mob then we have access to its variables
+	"""
+	mob.mob_number = mob_count
 	LoggerGlobal.info(
-	"Mob #" + str(mob_count) + " spawned | ID: " + str(mob.get_instance_id())
+	"Mob #" + str(mob.mob_number) + " spawned | ID: " + str(mob.get_instance_id())
 )
 
 	# Choose a random location on Path2D.

@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-
+var mob_number: int
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var mob_types = Array($AnimatedSprite2D.sprite_frames.get_animation_names())
@@ -8,4 +8,8 @@ func _ready() -> void:
 	$AnimatedSprite2D.play()
 
 func _on_visible_on_screen_notifier_2d_screen_exited():
+	LoggerGlobal.info(
+		"Mob #" + str(mob_number) +
+		" cleared | ID: " + str(get_instance_id())
+	)
 	queue_free()

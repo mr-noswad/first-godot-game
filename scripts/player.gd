@@ -6,7 +6,7 @@ var screen_size # Size of the game window.
 @export var speed = 400 # How fast the player will move (pixels/sec).
 @export var bullet_scene: PackedScene
 
-var last_direction: Vector2 = Vector2.DOWN
+var last_direction: Vector2 = Vector2.UP
 var player_bullet_count: int = 0
 
 # Called when the node enters the scene tree for the first time.
@@ -81,6 +81,10 @@ func _process(delta: float) -> void:
 		velocity.y += 1
 	if Input.is_action_pressed("move_up"):
 		velocity.y -= 1
+	
+	if velocity.length() > 0:
+		last_direction = velocity.normalized()
+		
 	if Input.is_action_just_pressed("shoot"):
 		"""
 		At the top @export var bullet_scene: PackedScene
@@ -97,14 +101,16 @@ func _process(delta: float) -> void:
 		var bullet: Area2D = bullet_scene.instantiate()
 		get_parent().get_node("Bullets").add_child(bullet)
 		bullet.global_position = global_position
-		bullet.direction = velocity
+		if velocity.length() == 0:
+			bullet.direction = last_direction
+		else:
+			bullet.direction = velocity.normalized()
 		player_bullet_count += 1
 		LoggerGlobal.info(
 			"Player Bullet #" + str(player_bullet_count) + " spawned | ID: " + str(bullet.get_instance_id()))
 		
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
-		last_direction = velocity.normalized()
 		$AnimatedSprite2D.play()
 	else:
 		$AnimatedSprite2D.stop()
