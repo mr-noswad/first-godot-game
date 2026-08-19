@@ -5,6 +5,12 @@ var screen_size # Size of the game window.
 
 @export var speed = 400 # How fast the player will move (pixels/sec).
 @export var bullet_scene: PackedScene
+@onready var healthbar = $HealthBar
+@export var max_health: int = 100
+
+
+var health: int
+var is_dying := false
 
 
 signal shoot(bullet, direction, location)
@@ -14,8 +20,11 @@ var player_bullet_count: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	LoggerGlobal.info("Player script is running")
-	screen_size = get_viewport_rect().size
+	health = max_health
+	healthbar.init_health(health)
+	screen_size = get_viewport_rect().size # If you change this it should be a camera2d node and have the script there.
 	hide()
+	$death_animation.hide()
 
 func movement(velocity):
 	if velocity.x != 0 and velocity.y != 0:
@@ -86,33 +95,6 @@ func _process(delta: float) -> void:
 	
 	if velocity.length() > 0:
 		last_direction = velocity.normalized()
-		
-	#if Input.is_action_just_pressed("shoot"):
-		"""
-		At the top @export var bullet_scene: PackedScene
-		We add the bullet scene in the ui to the right after the top is done
-		Add the "Bullets" 2d node and add the bullet as a child
-		
-		Global position refers to globabl position of this script, the player
-		
-		So bullet pos = players global pos
-		so if we were in a different script that would be the global pos
-		and the bullet dir is equal the velocity which is above. 
-		
-		"""
-		
-		
-		#var bullet: Area2D = bullet_scene.instantiate()
-		#get_parent().get_node("Bullets").add_child(bullet)
-		#bullet.global_position = global_position
-		#if velocity.length() == 0:
-			#bullet.direction = last_direction
-		#else:
-			#bullet.direction = velocity.normalized()
-		#player_bullet_count += 1
-		#LoggerGlobal.info(
-			#"Player Bullet #" + str(player_bullet_count) + " spawned | ID: " + str(bullet.get_instance_id()))
-		
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 		$AnimatedSprite2D.play()
@@ -127,16 +109,47 @@ func _process(delta: float) -> void:
 
 	movement(velocity)
 
-	
+func reset() -> void:
+	is_dying = false
+	$AnimatedSprite2D.show()
+	$CollisionShape2D.set_deferred("disabled", false)
 
-func _on_body_entered(_body: Node2D) -> void:
+
+func die() -> void:
+	if is_dying:
+		return
+	is_dying = true
+
 	LoggerGlobal.info("Player is dead")
-	hide() # Player disappears after being hit.
+	$AnimatedSprite2D.hide() # Player disappears after being hit.
 	hit.emit()
-	# Must be deferred as we can't change physics properties on a physics callback.
 	$CollisionShape2D.set_deferred("disabled", true)
+	
+	$death_animation.time_to_die()
+	
+func take_damage(amount: int) -> void:
+	health = max(health - amount, 0)
+	healthbar.health = health
+	LoggerGlobal.info(
+		"Player took " + str(amount) +
+		" damage | HP: " + str(health)
+	)
+	if health <= 0:
+		die()
+
+"""
+I dont call body.take_damage here because I want damage on myself. 
+"""
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group("mobs"):
+		take_damage(25)
+
 
 func start(pos):
+	health = max_health
+	healthbar.init_health(health)
+	is_dying = false
 	position = pos
 	show()
+	$AnimatedSprite2D.show()
 	$CollisionShape2D.disabled = false

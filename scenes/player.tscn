@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://dq6oj7fryib5r" path="res://scenes/bullet.tscn" id="2_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://7pudnfsbv15l" path="res://art/playerGrey_walk1.png" id="3_2hs0m"]
 [ext_resource type="Texture2D" uid="uid://coe265bdvksoy" path="res://art/playerGrey_walk2.png" id="4_1jxqw"]
+[ext_resource type="PackedScene" uid="uid://1k6o5beof7lw" path="res://scenes/death.tscn" id="7_fjrip"]
+[ext_resource type="PackedScene" uid="uid://rss5m61swamh" path="res://scenes/health_bar.tscn" id="8_smehm"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4l4ft"]
 animations = [{
@@ -36,19 +38,29 @@ animations = [{
 radius = 27.0
 height = 68.0
 
-[node name="Player" type="Area2D" unique_id=827172220]
+[node name="Player" type="Area2D" unique_id=827172220 groups=["player"]]
+position = Vector2(246, 244)
 collision_mask = 2
 script = ExtResource("1_sweqy")
 bullet_scene = ExtResource("2_tuyoq")
 metadata/_edit_group_ = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1854637324]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1854637324 groups=["player"]]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_4l4ft")
 animation = &"up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1138521967]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1138521967 groups=["player"]]
 shape = SubResource("CapsuleShape2D_xboni")
+
+[node name="HealthBar" parent="." unique_id=1496547302 instance=ExtResource("8_smehm")]
+offset_left = -33.000004
+offset_top = 38.0
+offset_right = 35.34715
+offset_bottom = 56.51245
+rotation = 0.0
+
+[node name="death_animation" parent="." unique_id=639226299 instance=ExtResource("7_fjrip")]
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="shoot" from="." to="." method="_on_shoot"]

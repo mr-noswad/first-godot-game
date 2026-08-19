@@ -4,6 +4,7 @@ extends CanvasLayer
 signal start_game
 # Called when the node enters the scene tree for the first time.
 
+
 func show_message(text):
 	$Message.text = text
 	$Message.show()
@@ -30,3 +31,6 @@ func _on_start_button_pressed() -> void:
 
 func _on_message_timer_timeout() -> void:
 	$Message.hide()
+
+func update_kill_count(kill_count):
+	$KillCounter.text = str(kill_count)

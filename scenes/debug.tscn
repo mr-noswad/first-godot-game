@@ -1,21 +1,21 @@
-[gd_scene format=3 uid="uid://b43kfbfhjt67c"]
+[gd_scene format=3 uid="uid://crj3y43liuvrc"]
 
-[ext_resource type="Script" uid="uid://c44dbivtg8dv2" path="res://scripts/main.gd" id="1_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://68apfnli7dh" path="res://scenes/mob.tscn" id="2_h2yge"]
-[ext_resource type="PackedScene" uid="uid://kksifcmoq3di" path="res://scenes/player.tscn" id="3_h2yge"]
-[ext_resource type="PackedScene" uid="uid://c1dcrpvi8ac6y" path="res://scenes/hud.tscn" id="4_1bvp3"]
-[ext_resource type="AudioStream" uid="uid://bwot0bsx0t4kp" path="res://art/House In a Forest Loop.ogg" id="5_7mycd"]
-[ext_resource type="AudioStream" uid="uid://lp4kk4rhjao4" path="res://art/gameover.wav" id="6_272bh"]
+[ext_resource type="Script" uid="uid://d4l431bd5brot" path="res://scripts/debug.gd" id="1_kayp2"]
+[ext_resource type="PackedScene" uid="uid://68apfnli7dh" path="res://scenes/mob.tscn" id="2_t48sv"]
+[ext_resource type="PackedScene" uid="uid://kksifcmoq3di" path="res://scenes/player.tscn" id="3_svo7y"]
+[ext_resource type="PackedScene" uid="uid://c1dcrpvi8ac6y" path="res://scenes/hud.tscn" id="4_5ph7u"]
+[ext_resource type="AudioStream" uid="uid://bwot0bsx0t4kp" path="res://art/House In a Forest Loop.ogg" id="5_o7ao6"]
+[ext_resource type="AudioStream" uid="uid://lp4kk4rhjao4" path="res://art/gameover.wav" id="6_naxnx"]
 
 [sub_resource type="Curve2D" id="Curve2D_1bvp3"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -1, -5, 0, 0, 0, 0, 479, -2, 0, 0, 0, 0, 718, -1, 0, 0, 0, 0, 720, 377, 0, 0, 0, 0, 723, 721, 0, 0, 0, 0, 479, 720, 0, 0, 0, 0, -5, 717, 0, 0, 0, 0, -1, -5)
+"points": PackedVector2Array(0, 0, 0, 0, -1, -5, 0, 0, 0, 0, 479, -2, 0, 0, 0, 0, 479, 720, 0, 0, 0, 0, -5, 717, 0, 0, 0, 0, -1, -5)
 }
-point_count = 8
+point_count = 5
 
-[node name="Main" type="Node" unique_id=1602575958]
-script = ExtResource("1_0xm2m")
-mob_scene = ExtResource("2_h2yge")
+[node name="Debug" type="Node" unique_id=1602575958]
+script = ExtResource("1_kayp2")
+mob_scene = ExtResource("2_t48sv")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1380504063]
 anchors_preset = 15
@@ -44,18 +44,27 @@ curve = SubResource("Curve2D_1bvp3")
 position = Vector2(-1, -5)
 rotation = 0.0062499186
 
-[node name="Player" parent="." unique_id=827172220 instance=ExtResource("3_h2yge")]
+[node name="Player" parent="." unique_id=827172220 instance=ExtResource("3_svo7y")]
 
-[node name="HUD" parent="." unique_id=156967465 instance=ExtResource("4_1bvp3")]
+[node name="HUD" parent="." unique_id=156967465 instance=ExtResource("4_5ph7u")]
 
 [node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=1445823687]
-stream = ExtResource("5_7mycd")
+stream = ExtResource("5_o7ao6")
 parameters/looping = true
 
 [node name="DeathSound" type="AudioStreamPlayer2D" parent="." unique_id=760714682]
-stream = ExtResource("6_272bh")
+stream = ExtResource("6_naxnx")
 
 [node name="Bullets" type="Node2D" parent="." unique_id=1380812705]
+
+[node name="debug1" type="Marker2D" parent="." unique_id=925181563]
+position = Vector2(119, 176)
+
+[node name="debug2" type="Marker2D" parent="." unique_id=113677000]
+position = Vector2(300, 180)
+
+[node name="debug3" type="Marker2D" parent="." unique_id=2127851492]
+position = Vector2(210, 180)
 
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]

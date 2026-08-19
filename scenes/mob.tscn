@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://bhjq5vyc6d1a6" path="res://art/enemySwimming_2.png" id="4_ieysi"]
 [ext_resource type="Texture2D" uid="uid://cqp8wivlr5nf8" path="res://art/enemyWalking_1.png" id="5_cixyi"]
 [ext_resource type="Texture2D" uid="uid://bq7pf5pxtm8j7" path="res://art/enemyWalking_2.png" id="6_7ulmv"]
+[ext_resource type="PackedScene" uid="uid://rss5m61swamh" path="res://scenes/health_bar.tscn" id="8_wpivu"]
+[ext_resource type="PackedScene" uid="uid://1k6o5beof7lw" path="res://scenes/death.tscn" id="9_nao87"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dy6sc"]
 animations = [{
@@ -48,11 +50,6 @@ animations = [{
 radius = 34.0
 height = 68.0
 
-[sub_resource type="Theme" id="Theme_ebxvl"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nao87"]
-bg_color = Color(0, 0.72544825, 0.20066077, 1)
-
 [node name="Mob" type="RigidBody2D" unique_id=2092840894 groups=["mobs"]]
 collision_layer = 2
 collision_mask = 9
@@ -72,16 +69,15 @@ shape = SubResource("CapsuleShape2D_nokgg")
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1226977401 groups=["mobs"]]
 position = Vector2(3, 0)
 
-[node name="HealthBar" type="ProgressBar" parent="." unique_id=1204930072 groups=["mobs"]]
-offset_left = 26.0
-offset_top = -4.0
-offset_right = 95.0
-offset_bottom = 5.0
-offset_transform_enabled = true
-offset_transform_rotation = 1.5707964
-theme = SubResource("Theme_ebxvl")
-theme_override_styles/fill = SubResource("StyleBoxFlat_nao87")
-value = 60.0
-show_percentage = false
+[node name="HealthBar" parent="." unique_id=1496547302 instance=ExtResource("8_wpivu")]
+offset_left = 64.0
+offset_top = -33.0
+offset_right = 133.0
+offset_bottom = -6.0
 
+[node name="death_animation" parent="." unique_id=639226299 instance=ExtResource("9_nao87")]
+position = Vector2(5.7509537, -10.598541)
+scale = Vector2(0.2426648, 0.2310936)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
