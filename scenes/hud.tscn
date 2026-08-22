@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ygpw4670g542" path="res://scripts/hud.gd" id="1_64ctp"]
 [ext_resource type="FontFile" uid="uid://dpg87roxxuik1" path="res://fonts/Xolonium-Regular.ttf" id="2_8sq4i"]
+[ext_resource type="PackedScene" uid="uid://rss5m61swamh" path="res://scenes/health_bar.tscn" id="3_5ysmq"]
 
 [sub_resource type="InputEventAction" id="InputEventAction_kek77"]
 action = &"start_game"
@@ -72,6 +73,13 @@ theme_override_font_sizes/font_size = 64
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="HealthBar" parent="." unique_id=1496547302 instance=ExtResource("3_5ysmq")]
+offset_left = 325.0
+offset_top = 7.0
+offset_right = 390.17642
+offset_bottom = 25.396973
+rotation = 0.0
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]

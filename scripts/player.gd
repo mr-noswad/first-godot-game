@@ -1,16 +1,20 @@
 extends Area2D
 
 signal hit
+signal no_ammo
+signal health_changed
 var screen_size # Size of the game window.
 
 @export var speed = 400 # How fast the player will move (pixels/sec).
 @export var bullet_scene: PackedScene
-@onready var healthbar = $HealthBar
 @export var max_health: int = 100
+@export var max_ammo: int = 10
 
 
 var health: int
+var ammo: int
 var is_dying := false
+var no_ammo_bool := false
 
 
 signal shoot(bullet, direction, location)
@@ -21,7 +25,7 @@ var player_bullet_count: int = 0
 func _ready() -> void:
 	LoggerGlobal.info("Player script is running")
 	health = max_health
-	healthbar.init_health(health)
+	ammo = max_ammo
 	screen_size = get_viewport_rect().size # If you change this it should be a camera2d node and have the script there.
 	hide()
 	$death_animation.hide()
@@ -105,14 +109,26 @@ func _process(delta: float) -> void:
 	position = position.clamp(Vector2.ZERO, screen_size)
 	
 	if Input.is_action_just_pressed("shoot"):
-		shoot.emit(bullet_scene, rotation, position, last_direction)
+		fire_and_lose_ammo()
 
 	movement(velocity)
 
-func reset() -> void:
-	is_dying = false
-	$AnimatedSprite2D.show()
-	$CollisionShape2D.set_deferred("disabled", false)
+func fire_and_lose_ammo() -> void:
+	if no_ammo_bool:
+		return
+	if ammo != 0:
+		ammo = max(ammo - 1, 0)
+		shoot.emit(bullet_scene, rotation, position, last_direction)
+	else:
+		print("no ammo")
+		no_ammo.emit()
+		no_ammo_bool = true
+	
+
+#func reset() -> void:
+	#is_dying = false
+	#$AnimatedSprite2D.show()
+	#$CollisionShape2D.set_deferred("disabled", false)
 
 
 func die() -> void:
@@ -124,16 +140,15 @@ func die() -> void:
 	$AnimatedSprite2D.hide() # Player disappears after being hit.
 	hit.emit()
 	$CollisionShape2D.set_deferred("disabled", true)
-	
 	$death_animation.time_to_die()
-	
+
 func take_damage(amount: int) -> void:
 	health = max(health - amount, 0)
-	healthbar.health = health
 	LoggerGlobal.info(
 		"Player took " + str(amount) +
 		" damage | HP: " + str(health)
 	)
+	health_changed.emit(health)
 	if health <= 0:
 		die()
 
@@ -147,7 +162,6 @@ func _on_body_entered(body: Node2D) -> void:
 
 func start(pos):
 	health = max_health
-	healthbar.init_health(health)
 	is_dying = false
 	position = pos
 	show()

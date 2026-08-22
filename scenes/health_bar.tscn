@@ -29,7 +29,6 @@ scale = Vector2(1, 0.333333)
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxEmpty_xboni")
 theme_override_styles/fill = SubResource("StyleBoxFlat_4l4ft")
-value = 60.0
 show_percentage = false
 script = ExtResource("1_1bvlm")
 
@@ -43,7 +42,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_xboni")
 theme_override_styles/fill = SubResource("StyleBoxFlat_wi6qf")
-value = 90.0
 show_percentage = false
 
 [node name="Timer" type="Timer" parent="." unique_id=1780608858]

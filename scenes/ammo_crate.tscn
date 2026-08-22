@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://b1cfhym4jxmwx"]
+
+[ext_resource type="Texture2D" uid="uid://b6qfjn1haha0m" path="res://art/ammo2.png" id="1_pdg5y"]
+[ext_resource type="Script" uid="uid://cihmr88o5gcll" path="res://scripts/ammo_crate.gd" id="2_qq18h"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qq18h"]
+radius = 23.991135
+
+[node name="Area2D" type="Area2D" unique_id=720393104]
+scale = Vector2(1.0420516, 1.0926821)
+collision_layer = 8
+script = ExtResource("2_qq18h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623040509]
+position = Vector2(-0.95964545, 0.91517925)
+shape = SubResource("CircleShape2D_qq18h")
+
+[node name="ammo_crate" type="Sprite2D" parent="." unique_id=420416228]
+position = Vector2(0.9596454, 0.91517925)
+texture = ExtResource("1_pdg5y")
+region_enabled = true
+region_rect = Rect2(23.6529, 24.852993, 55.396492, 51.4396)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

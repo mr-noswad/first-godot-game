@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c1dcrpvi8ac6y" path="res://scenes/hud.tscn" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://bwot0bsx0t4kp" path="res://art/House In a Forest Loop.ogg" id="5_7mycd"]
 [ext_resource type="AudioStream" uid="uid://lp4kk4rhjao4" path="res://art/gameover.wav" id="6_272bh"]
+[ext_resource type="PackedScene" uid="uid://b1cfhym4jxmwx" path="res://scenes/ammo_crate.tscn" id="7_o6xl0"]
 
 [sub_resource type="Curve2D" id="Curve2D_1bvp3"]
 _data = {
@@ -16,6 +17,7 @@ point_count = 8
 [node name="Main" type="Node" unique_id=1602575958]
 script = ExtResource("1_0xm2m")
 mob_scene = ExtResource("2_h2yge")
+ammo_scene = ExtResource("7_o6xl0")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1380504063]
 anchors_preset = 15
@@ -57,9 +59,23 @@ stream = ExtResource("6_272bh")
 
 [node name="Bullets" type="Node2D" parent="." unique_id=1380812705]
 
+[node name="AmmoSpawn" type="Marker2D" parent="." unique_id=1176513613]
+position = Vector2(355, 310)
+
+[node name="debug1" type="Marker2D" parent="." unique_id=461738010]
+position = Vector2(119, 176)
+
+[node name="debug2" type="Marker2D" parent="." unique_id=774693869]
+position = Vector2(300, 180)
+
+[node name="debug3" type="Marker2D" parent="." unique_id=808305896]
+position = Vector2(210, 180)
+
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="health_changed" from="Player" to="." method="update_player_health"]
 [connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="no_ammo" from="Player" to="." method="spawn_ammo"]
 [connection signal="shoot" from="Player" to="." method="_on_player_shoot"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]

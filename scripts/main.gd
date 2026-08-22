@@ -1,8 +1,12 @@
 extends Node
 
 @export var mob_scene: PackedScene
+@export var ammo_scene: PackedScene
+@export var debug_mode: bool = false
+@onready var healthbar = $HUD/HealthBar
 var score
 var kill_count: int = 0
+@onready var ammo_spawn: Marker2D = $AmmoSpawn
 
 var mob_count: int = 0
 
@@ -15,8 +19,34 @@ func game_over() -> void:
 	$Music.stop()
 	$DeathSound.play()
 	
+func spawn_ammo():
+	var crate = ammo_scene.instantiate()
+	add_child(crate)
+	crate.global_position = ammo_spawn.global_position
 
+func spawn_debug_mobs() -> void:
+	if debug_mode:
+		var spawn_positions = [$debug1.global_position, $debug2.global_position ,$debug3.global_position]
+		for spawns in spawn_positions:
+			var mob = mob_scene.instantiate()
+			add_child(mob)
+			mob.global_position = spawns
+	
 func new_game():
+	"""
+	We want the players health to be apart of the hud. We add the healthbar as a child to the hud. 
+	We call that child node with the var at the top. we already added the HUD node to the scene. 
+	We init that health bar with the players max health below. 
+	
+	in take_damage we 
+	health_changed.emit(health)
+	
+	Then we connect that signal to here from the player node in main
+	
+	func update_player_health(new_health):
+	healthbar.health = new_health
+	"""
+	healthbar.init_health($Player.max_health)
 	get_tree().call_group("mobs", "queue_free")
 	score = 0
 	$Player.start($StartPosition.position)
@@ -24,8 +54,11 @@ func new_game():
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready")
 	$Music.play()
+	spawn_debug_mobs()
 
 func _on_mob_timer_timeout() -> void:
+	if debug_mode:
+		return
 	var mob = mob_scene.instantiate()
 	mob_count += 1
 	"""
@@ -83,10 +116,13 @@ func update_kill_count() -> void:
 	kill_count += 1
 	$HUD.update_kill_count(kill_count)
 
+func update_player_health(new_health):
+	healthbar.health = new_health
+	
 
 
 
-# ============================================================
+# ==================================================_on_player_health_changed==========
 # COLLISION LAYERS & MASKS
 # ============================================================
 #

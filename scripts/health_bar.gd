@@ -26,7 +26,6 @@ func _set_health(new_health):
 	health = min(max_value, new_health)
 	value = health
 	_update_colour(health)
-		
 	if health < prev_health:
 		timer.start()
 	else:
